@@ -1,0 +1,19 @@
+jobs: $ncpus
+
+packages: ./*.cabal
+
+source-repository-package
+    type: git
+    location: https://github.com/pkamenarsky/concur
+    tag: dc5347b35c79654d58fa95716f425ee7248504fb
+    subdir: concur-core
+
+source-repository-package
+    type: git
+    location: https://github.com/pkamenarsky/replica
+    tag: c0046ff9b3be5e20e5306de743b83620cf59c6a
+
+source-repository-package
+    type: git
+    location: https://github.com/pkamenarsky/concur-replica
+    tag: d282c20eeabcab4ef265f44622f784d8c50ab1f4

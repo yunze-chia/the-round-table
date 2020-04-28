@@ -1,0 +1,38 @@
+cabal-version:       3.0
+
+name:                the-round-table
+version:             0.1.0.0
+
+executable the-round-table
+  main-is:             Main.hs
+  other-modules:       Engine.State
+                     , Engine.Helpers
+                     , Engine.Game
+                     , Interface.Index
+                     , Interface.Types
+                     , Interface.Init.Handler
+                     , Interface.Init.Render
+                     , Interface.Room.Handler
+                     , Interface.Room.Render
+                     , Interface.Game.Handler
+                     , Interface.Game.Render
+                     , Interface.Game.Core.Handler
+                     , Interface.Game.Core.Render
+                     , Interface.Gamemaster.Handler
+                     , Interface.Gamemaster.Render
+                     , Interface.Gamemaster.Board.Render
+                     , Interface.Gamemaster.Config.Render
+  build-depends:       base >=4.13 && <4.14
+                     , text
+                     , containers
+                     , random
+                     , stm
+                     , fmt
+                     , microlens-platform
+                     , websockets
+                     , concur-replica
+                     , concur-core
+                     , replica
+  hs-source-dirs:      src
+  default-language:    Haskell2010
+  ghc-options:         -Wall -Wno-name-shadowing -Wno-incomplete-patterns -Wno-incomplete-uni-patterns
