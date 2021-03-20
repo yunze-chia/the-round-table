@@ -10,10 +10,10 @@ source-repository-package
 
 source-repository-package
     type: git
-    location: https://github.com/pkamenarsky/replica
-    tag: c0046ff9b3be5e20e5306de743b83620cf59c6a
+    location: https://github.com/yunze-chia/replica
+    tag: 0a5aba2025e0045155491d42c7cd6d77d60807ca
 
 source-repository-package
     type: git
     location: https://github.com/pkamenarsky/concur-replica
-    tag: d282c20eeabcab4ef265f44622f784d8c50ab1f4
+    tag: e15785b3b09e97790ae23c8ae8671c191d039a2c
