@@ -2,25 +2,26 @@
 
 module Interface.Game.Render where
 
-import           Concur.Core              (Widget)
-import           Concur.Replica           (HTML)
-import qualified Concur.Replica.DOM       as H
-import qualified Concur.Replica.DOM.Props as P
-import           Data.List                (sort)
-import           Data.Text                (intercalate)
-import           Engine.Helpers           (isGood)
-import           Engine.State
-import           Fmt                      ((+|), (+||), (|+), (||+))
-import           Lens.Micro.Platform      ((^.))
+import Concur.Core (Widget)
+import Concur.Replica (HTML)
+import qualified Concur.Replica.DOM as H
+import Data.List (sort)
+import Data.Text (intercalate)
+import Engine.Helpers (isGood)
+import Engine.State
+import Fmt ((+|), (+||), (|+), (||+))
+import Lens.Micro.Platform ((^.))
 
-renderGame :: Widget HTML a -> Widget HTML a -> Widget HTML a
-renderGame gameCharInfo gameCore =
+renderGame :: Widget HTML a -> Widget HTML a -> Widget HTML a -> Widget HTML a
+renderGame gameCharInfo gameCore gameBoard =
   H.div
     []
-    [ H.div [P.style [("margin", "1em")]] [gameCharInfo],
+    [ H.div [] [gameCharInfo],
       H.div
-        [P.className "border border-primary container]", P.style [("margin", "1em")]]
-        [H.div [P.style [("margin", "1em")]] [gameCore]]
+        []
+        [ H.div [] [gameCore],
+          H.div [] [gameBoard]
+        ]
     ]
 
 renderCharInfo :: Player -> [Player] -> Widget HTML a

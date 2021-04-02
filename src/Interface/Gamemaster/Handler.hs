@@ -2,23 +2,22 @@
 
 module Interface.Gamemaster.Handler where
 
-import Concur.Core                        (Widget)
-import Concur.Replica                     (HTML)
-import Control.Applicative                ((<|>))
-import Control.Concurrent.STM             (atomically)
-import Control.Concurrent.STM.TChan       (TChan, dupTChan, newBroadcastTChan, readTChan, writeTChan)
-import Control.Concurrent.STM.TVar        (TVar, modifyTVar', newTVar, readTVar, readTVarIO, writeTVar)
-import Control.Monad.IO.Class             (liftIO)
-import Engine.Game                        (newGame)
-import Engine.Helpers                     (defaultGameConfig)
+import Concur.Core (Widget)
+import Concur.Replica (HTML)
+import Control.Applicative ((<|>))
+import Control.Concurrent.STM (atomically)
+import Control.Concurrent.STM.TChan (TChan, dupTChan, newBroadcastTChan, readTChan, writeTChan)
+import Control.Concurrent.STM.TVar (TVar, modifyTVar', newTVar, readTVar, readTVarIO, writeTVar)
+import Control.Monad.IO.Class (liftIO)
+import Engine.Game (newGame)
+import Engine.Helpers (defaultGameConfig)
 import Engine.State
-import Interface.Gamemaster.Board.Render  (renderBoard, renderLeaderSequence, renderQuestHistory, renderVoteHistory)
 import Interface.Gamemaster.Config.Render (renderGameConfig, renderKick, renderReturn)
-import Interface.Gamemaster.Render        (renderRoomInfoGM, renderWaitRoomGM)
-import Interface.Room.Render              (renderLobby, renderRoom)
-import Interface.Types                    (Action (Action, ActionValue, Update), PlayerName, Room (GameRoom, WaitingRoom), RoomId)
-import Lens.Micro.Platform                (each, (^.), (^..))
-import System.Random                      (newStdGen)
+import Interface.Gamemaster.Render (renderRoomInfoGM, renderWaitRoomGM)
+import Interface.Room.Render (renderLobby, renderRoom)
+import Interface.Types (Action (Action, ActionValue, Update), PlayerName, Room (GameRoom, WaitingRoom), RoomId)
+import Lens.Micro.Platform (each, (^.), (^..))
+import System.Random (newStdGen)
 
 handlerGamemaster :: RoomId -> TVar Room -> TChan () -> Widget HTML a
 handlerGamemaster roomId roomStateVar updateChan =
@@ -59,14 +58,8 @@ handlerGamemasterMain roomVar roomChan = do
 
 handlerGamemasterGameRoom :: TVar Game -> TChan () -> Widget HTML ()
 handlerGamemasterGameRoom gameVar gameChan = do
-  game <- liftIO . readTVarIO $ gameVar
   let receiveUpdate = Update <$ (liftIO . atomically . readTChan $ gameChan)
-      receiveAction =
-        Action
-          <$ renderBoard
-            (if isGameOver $ game ^. present then renderReturn else renderLeaderSequence (game ^. players ^.. each . name))
-            (renderQuestHistory [p | p <- game ^. history ++ [game ^. present], isEndPhase p])
-            (renderVoteHistory (game ^. players ^.. each . name) $ game ^. history ++ [game ^. present])
+      receiveAction = Action <$ renderReturn
   action <- receiveUpdate <|> receiveAction
   case action of
     Update -> handlerGamemasterGameRoom gameVar gameChan

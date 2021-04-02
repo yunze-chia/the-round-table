@@ -10,17 +10,18 @@ executable the-round-table
                      , Engine.Game
                      , Interface.Index
                      , Interface.Types
+                     , Interface.Bulma
                      , Interface.Init.Handler
                      , Interface.Init.Render
                      , Interface.Room.Handler
                      , Interface.Room.Render
                      , Interface.Game.Handler
                      , Interface.Game.Render
+                     , Interface.Game.Board.Render
                      , Interface.Game.Core.Handler
                      , Interface.Game.Core.Render
                      , Interface.Gamemaster.Handler
                      , Interface.Gamemaster.Render
-                     , Interface.Gamemaster.Board.Render
                      , Interface.Gamemaster.Config.Render
   build-depends:       base >=4.14 && <4.15
                      , text

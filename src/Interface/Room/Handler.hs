@@ -1,17 +1,17 @@
 module Interface.Room.Handler where
 
-import Concur.Core                  (Widget)
-import Concur.Replica               (HTML)
-import Control.Applicative          ((<|>))
-import Control.Concurrent.STM       (atomically)
+import Concur.Core (Widget)
+import Concur.Replica (HTML)
+import Control.Applicative ((<|>))
+import Control.Concurrent.STM (atomically)
 import Control.Concurrent.STM.TChan (TChan, dupTChan, readTChan, writeTChan)
-import Control.Concurrent.STM.TVar  (TVar, readTVar, readTVarIO, writeTVar)
-import Control.Monad.IO.Class       (liftIO)
+import Control.Concurrent.STM.TVar (TVar, readTVar, readTVarIO, writeTVar)
+import Control.Monad.IO.Class (liftIO)
 import Engine.State
-import Interface.Game.Handler       (handlerGame)
-import Interface.Room.Render        (renderBounced, renderLobby, renderRoom, renderRoomInfo)
-import Interface.Types              (PlayerName, Room (GameRoom, WaitingRoom), RoomId)
-import Lens.Micro.Platform          (each, (^..))
+import Interface.Game.Handler (handlerGame)
+import Interface.Room.Render (renderBounced, renderLobby, renderRoom, renderRoomInfo)
+import Interface.Types (PlayerName, Room (GameRoom, WaitingRoom), RoomId)
+import Lens.Micro.Platform (each, (^..))
 
 handlerRoom :: RoomId -> PlayerName -> TVar Room -> TChan () -> Widget HTML a
 handlerRoom roomId playerName roomVar roomChan =
@@ -38,8 +38,8 @@ handlerRoomMain playerName roomVar roomChan = do
         widget <|> (liftIO . atomically $ readTChan roomChan)
         handlerRoomMain playerName roomVar roomChan
   case room of
-    Nothing                             -> renderBounced
-    Just (GameRoom gameVar gameChan)    -> updateLoop $ handlerGame playerName gameVar =<< (liftIO . atomically $ dupTChan gameChan)
+    Nothing -> renderBounced
+    Just (GameRoom gameVar gameChan) -> updateLoop $ handlerGame playerName gameVar =<< (liftIO . atomically $ dupTChan gameChan)
     Just (WaitingRoom waitVar waitChan) -> updateLoop $ handlerWaitRoom playerName waitVar =<< (liftIO . atomically $ dupTChan waitChan)
 
 handlerWaitRoom :: PlayerName -> TVar [PlayerName] -> TChan () -> Widget HTML a

@@ -2,20 +2,20 @@
 
 module Interface.Game.Core.Handler where
 
-import Concur.Core                  (Widget)
-import Concur.Replica               (HTML)
-import Control.Applicative          ((<|>))
-import Control.Concurrent.STM       (atomically, orElse)
+import Concur.Core (Widget)
+import Concur.Replica (HTML)
+import Control.Applicative ((<|>))
+import Control.Concurrent.STM (atomically, orElse)
 import Control.Concurrent.STM.TChan (TChan, readTChan, writeTChan)
-import Control.Concurrent.STM.TVar  (TVar, modifyTVar', readTVarIO)
-import Control.Monad                (when)
-import Control.Monad.IO.Class       (liftIO)
+import Control.Concurrent.STM.TVar (TVar, modifyTVar', readTVarIO)
+import Control.Monad (when)
+import Control.Monad.IO.Class (liftIO)
 import Engine.Game
-import Engine.Helpers               (isGood)
+import Engine.Helpers (isGood)
 import Engine.State
 import Interface.Game.Core.Render
-import Interface.Types              (Action (Action, ActionValue, Update), PlayerName)
-import Lens.Micro.Platform          (singular, (^.), _head, _last)
+import Interface.Types (Action (Action, ActionValue, Update), PlayerName)
+import Lens.Micro.Platform (singular, (^.), _head, _last)
 
 handlerGameCore :: PlayerName -> TVar Game -> TChan () -> Widget HTML a
 handlerGameCore playerName gameVar gameChan = do
@@ -43,7 +43,7 @@ handlerGameCore playerName gameVar gameChan = do
               initialProposed = Proposed leader [] (game ^. future . singular _head)
           action <- receiveUpdate <|> receiveAction
           case action of
-            Update                              -> loop
+            Update -> loop
             ActionValue (Proposed _ team quest) -> receiveOrMakeUpdateThenLoop isSelectionPhase $ resolveSelectionPhase team quest
         else do
           _ <- receiveUpdate <|> renderSelectionWait leader
@@ -52,7 +52,7 @@ handlerGameCore playerName gameVar gameChan = do
       let receiveAction = ActionValue <$> renderVoting proposed votes
       action <- receiveUpdate <|> receiveAction
       case action of
-        Update           -> loop
+        Update -> loop
         ActionValue vote -> receiveOrMakeUpdateThenLoop isVotingPhase $ resolveVotingPhase player vote
     QuestPhase _ approved outcomes ->
       if player `elem` approved ^. proposed . team
@@ -60,7 +60,7 @@ handlerGameCore playerName gameVar gameChan = do
           let receiveAction = ActionValue <$> renderQuesting approved False outcomes
           action <- receiveUpdate <|> receiveAction
           case action of
-            Update              -> loop
+            Update -> loop
             ActionValue outcome -> receiveOrMakeUpdateThenLoop isQuestPhase $ resolveQuestPhase player outcome
         else do
           _ <- receiveUpdate <|> Action <$ renderQuesting approved True outcomes
@@ -74,7 +74,7 @@ handlerGameCore playerName gameVar gameChan = do
               receiveAction = ActionValue <$> renderAssassination goodPlayers (head goodPlayers)
           action <- receiveUpdate <|> receiveAction
           case action of
-            Update                   -> loop
+            Update -> loop
             ActionValue assassinated -> receiveOrMakeUpdateThenLoop isAssassinationPhase $ resolveAssassinationPhase assassinated
         else do
           _ <- receiveUpdate <|> renderAssassinationWait assassin

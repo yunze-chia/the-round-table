@@ -2,12 +2,12 @@
 
 module Interface.Gamemaster.Render where
 
-import           Concur.Core              (Widget)
-import           Concur.Replica           (HTML)
-import qualified Concur.Replica.DOM       as H
-import qualified Concur.Replica.DOM.Props as P
-import           Fmt                      ((+|), (|+))
-import           Interface.Types          (RoomId)
+import Concur.Core (Widget)
+import Concur.Replica (HTML)
+import qualified Concur.Replica.DOM as H
+import Fmt ((+|), (|+))
+import Interface.Bulma as Bulma
+import Interface.Types (RoomId)
 
 renderRoomInfoGM :: RoomId -> Widget HTML a
 renderRoomInfoGM roomId =
@@ -17,7 +17,7 @@ renderWaitRoomGM :: Widget HTML a -> Widget HTML a -> Widget HTML a -> Widget HT
 renderWaitRoomGM renderLobby renderKick renderGameConfig =
   H.div
     []
-    [ renderLobby,
-      H.div [P.style [("margin-top", "1em")]] [renderKick],
-      H.div [P.style [("margin-top", "1em")]] [renderGameConfig]
+    [ H.div [Bulma.block] [renderLobby],
+      H.div [Bulma.block] [renderKick],
+      H.div [Bulma.block] [renderGameConfig]
     ]
