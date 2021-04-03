@@ -7,7 +7,7 @@ import Concur.Replica (HTML)
 import qualified Concur.Replica.DOM as H
 import Data.Text (intercalate)
 import Fmt ((+|), (|+))
-import Interface.Bulma as Bulma
+import Interface.Bulma as Bulma (block, containerBox, hasTextCentered, title)
 import Interface.Types (PlayerName, RoomId)
 
 renderRoom :: Widget HTML a -> Widget HTML a -> Widget HTML a
@@ -27,4 +27,12 @@ renderLobby playerNames =
     [ H.header [Bulma.title] [H.text "Room Lobby"],
       H.div [] [H.text "Waiting for more players. Players currently in lobby: "],
       H.div [] [H.text $ intercalate ", " playerNames]
+    ]
+
+renderLobbyGamemaster :: Widget HTML a -> Widget HTML a -> Widget HTML a
+renderLobbyGamemaster renderLobby renderGameConfig =
+  H.div
+    []
+    [ H.div [Bulma.block] [renderLobby],
+      H.div [Bulma.block] [renderGameConfig]
     ]

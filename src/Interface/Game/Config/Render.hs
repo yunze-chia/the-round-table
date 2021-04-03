@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Interface.Gamemaster.Config.Render where
+module Interface.Game.Config.Render where
 
 import Concur.Core (Widget)
 import Concur.Replica (HTML)
@@ -10,9 +10,9 @@ import qualified Concur.Replica.DOM.Props as P
 import Data.Map ((!))
 import Data.Text (Text, pack)
 import Engine.Helpers (evilRequired)
-import Engine.State
+import Engine.State (Character (..), GameConfig, characters)
 import Fmt ((+||), (||+))
-import Interface.Bulma as Bulma
+import Interface.Bulma as Bulma (containerBox, title)
 import Interface.Types (Action (Action, ActionValue), PlayerName)
 import Lens.Micro.Platform ((%~), (&), (.~), (^.))
 
@@ -68,20 +68,3 @@ renderGameConfig playerNames message gameConfig = do
 
 renderReturn :: Widget HTML ()
 renderReturn = H.div [] [() <$ H.button [E.onClick] [H.text "Reset room"]]
-
-renderKick :: PlayerName -> Widget HTML PlayerName
-renderKick playerName = do
-  action <-
-    H.div
-      [Bulma.containerBox]
-      [ ActionValue
-          <$> H.input
-            [ E.targetValue . E.target <$> E.onChange,
-              P.placeholder "Enter player name",
-              P.value playerName
-            ],
-        H.div [] [Action <$ H.button [E.onClick] [H.text "Kick"]]
-      ]
-  case action of
-    ActionValue p -> renderKick p
-    Action -> return playerName

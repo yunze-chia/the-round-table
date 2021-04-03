@@ -9,7 +9,6 @@ import Control.Concurrent.STM.TChan (dupTChan, newBroadcastTChan)
 import Control.Concurrent.STM.TVar (TVar, modifyTVar', newTVar, readTVar)
 import Control.Monad.IO.Class (liftIO)
 import Data.Map (insert, (!?))
-import Interface.Gamemaster.Handler (handlerGamemaster)
 import Interface.Init.Render (renderInit)
 import Interface.Room.Handler (handlerRoom)
 import Interface.Types (Room (WaitingRoom), RoomMeta (RoomMeta), Server)
@@ -28,6 +27,4 @@ handlerInit serverVar = do
         roomChan <- newBroadcastTChan
         modifyTVar' serverVar $ insert roomId $ RoomMeta roomVar roomChan
         return $ RoomMeta roomVar roomChan
-  if playerName /= "gamemaster"
-    then handlerRoom roomId playerName roomVar =<< (liftIO . atomically $ dupTChan roomChan)
-    else handlerGamemaster roomId roomVar =<< (liftIO . atomically $ dupTChan roomChan)
+  handlerRoom roomId playerName roomVar =<< (liftIO . atomically $ dupTChan roomChan)

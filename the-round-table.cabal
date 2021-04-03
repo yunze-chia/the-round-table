@@ -18,11 +18,9 @@ executable the-round-table
                      , Interface.Game.Handler
                      , Interface.Game.Render
                      , Interface.Game.Board.Render
+                     , Interface.Game.Config.Render
                      , Interface.Game.Core.Handler
                      , Interface.Game.Core.Render
-                     , Interface.Gamemaster.Handler
-                     , Interface.Gamemaster.Render
-                     , Interface.Gamemaster.Config.Render
   build-depends:       base >=4.14 && <4.15
                      , text
                      , containers
