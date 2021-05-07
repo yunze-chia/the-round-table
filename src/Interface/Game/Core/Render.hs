@@ -12,6 +12,7 @@ import Data.Map (Map, keys)
 import Data.Text (Text, concat, intercalate)
 import Engine.State
 import Fmt ((+|), (+||), (|+), (||+))
+import Interface.Bulma as Bulma
 import Interface.Types (Action (Action, ActionValue))
 import Lens.Micro.Platform (each, (^.), (^..))
 import Prelude hiding (concat)
@@ -31,7 +32,7 @@ renderSelection leader players quests message proposed@(Proposed l t q) = do
   action <-
     H.div
       []
-      [ H.h5 [] [H.text "You are currently the leader. Select a team to go on a quest."],
+      [ H.h5 [Bulma.bolded] [H.text "You are currently the leader. Select a team to go on a quest."],
         H.div
           []
           [ H.div [] [H.text "Select party:"],
@@ -80,13 +81,13 @@ renderSelection leader players quests message proposed@(Proposed l t q) = do
         else renderSelection leader players quests "Number of people selected must match with quest requirement!" proposed
 
 renderSelectionWait :: Player -> Widget HTML a
-renderSelectionWait leader = H.h5 [] [H.text $ "Waiting for leader " +| leader ^. name |+ " to select team..."]
+renderSelectionWait leader = H.h5 [Bulma.bolded] [H.text $ "Waiting for leader " +| leader ^. name |+ " to select team..."]
 
 renderVoting :: Proposed -> Map Player VoteToken -> Widget HTML VoteToken
 renderVoting (Proposed leader team quest) votes =
   H.div
     []
-    [ H.h5 [] [H.text "Waiting for votes..."],
+    [ H.h5 [Bulma.bolded] [H.text "Please vote."],
       H.div [] [H.text $ "Party [ " +| intercalate ", " playerNames |+ " ]"],
       H.div [] [H.text $ "has been nominated by " +| leader ^. name |+ " to go on"],
       H.div [] [H.text $ "Quest [ " +| questText quest |+ " ]"],
@@ -111,7 +112,7 @@ renderVoting (Proposed leader team quest) votes =
 renderQuesting :: Voted -> Bool -> Map Player QuestToken -> Widget HTML QuestToken
 renderQuesting (Voted (Proposed _ party quest) _) wait outcomes =
   H.div [] $
-    [ H.h5 [] [H.text "Waiting for party to complete quest..."],
+    [ H.h5 [Bulma.bolded] [H.text "Waiting for party to complete quest..."],
       H.div [] [H.text $ "Party [ " +| intercalate ", " playerNames |+ " ]"],
       H.div [] [H.text $ "Quest [ " +| questText quest |+ " ]"]
     ]
@@ -140,7 +141,7 @@ renderAssassination players target = do
   action <-
     H.div
       []
-      [ H.h5 [] [H.text "You are the assassin. Find Merlin to win."],
+      [ H.h5 [Bulma.bolded] [H.text "You are the assassin. Find Merlin to win."],
         H.div
           []
           [ H.div [] [H.label [P.for "assassinate"] [H.text "Assassinate: "]],
@@ -161,10 +162,10 @@ renderAssassination players target = do
     Action -> return target
 
 renderAssassinationWait :: Player -> Widget HTML a
-renderAssassinationWait assassin = H.h5 [] [H.text $ "Waiting for assassin " +| assassin ^. name |+ " to kill..."]
+renderAssassinationWait assassin = H.h5 [Bulma.bolded] [H.text $ "Waiting for assassin " +| assassin ^. name |+ " to kill..."]
 
 renderGameOver :: Loyalty -> Text -> Maybe Player -> Widget HTML a
-renderGameOver winner winCon killed = H.h5 [] [H.text gameOverText]
+renderGameOver winner winCon killed = H.h5 [Bulma.bolded] [H.text gameOverText]
   where
     winText = "" +| winCon |+ " " +|| winner ||+ " team wins!"
     gameOverText = case killed of

@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Interface.Bulma (containerBox, block, title, button, input, bulmaCSS, containerBoxCentered, hasTextCentered) where
+module Interface.Bulma where
 
 import qualified Concur.Replica.DOM.Props as P
 import Data.Text (Text)
@@ -20,8 +20,8 @@ button = P.className "button"
 title :: P.Props a
 title = P.className "title"
 
-hasTextCentered :: P.Props a
-hasTextCentered = P.className "has-text-centered"
+widthWrapper :: P.Props a
+widthWrapper = P.className "container is-max-desktop has-text-centered"
 
 -- container :: P.Props a
 -- container = P.className "container"
@@ -39,7 +39,16 @@ containerBox :: P.Props a
 containerBox = P.className "container box"
 
 containerBoxCentered :: P.Props a
-containerBoxCentered = P.className "container box has-text-centered"
+containerBoxCentered = P.className "container box has-text-centered is-max-desktop"
+
+tableFullWidth :: P.Props a
+tableFullWidth = P.className "table is-fullwidth"
+
+header4 :: P.Props a
+header4 = P.className "is-size-4 has-text-weight-semibold"
+
+bolded :: P.Props a
+bolded = P.className "has-text-weight-bold has-text-primary"
 
 -- section :: P.Props a
 -- section = P.className "section"

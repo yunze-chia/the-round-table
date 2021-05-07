@@ -2,12 +2,12 @@
 
 module Engine.Game where
 
-import Data.Map            (elems, empty, fromList, insert, size, (!))
-import Data.Text           (Text)
+import Data.Map (elems, empty, fromList, insert, size, (!))
+import Data.Text (Text)
 import Engine.Helpers
 import Engine.State
 import Lens.Micro.Platform ((%~), (&), (.~), (^.))
-import System.Random       (RandomGen)
+import System.Random (RandomGen)
 
 newGame :: RandomGen g => g -> GameConfig -> [Text] -> Game
 newGame randomGen (GameConfig characters _ _ _) playerNames =
@@ -18,7 +18,7 @@ newGame randomGen (GameConfig characters _ _ _) playerNames =
       _future = futureQuests
     }
   where
-    players = zipWith Player playerNames $ shuffle randomGen characters
+    players = shuffle randomGen $ zipWith Player playerNames $ shuffle randomGen characters
     futureQuests = map (\(x, y, z) -> Quest x y z) (questRequiredNumber ! length players)
 
 resolveStartPhase :: Game -> Game

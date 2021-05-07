@@ -9,6 +9,7 @@ import Data.List (sort)
 import Data.Map (elems, toAscList)
 import Data.Text (concat, intercalate)
 import Engine.State
+import Interface.Bulma as Bulma
 import Interface.Types (PlayerName)
 import Lens.Micro.Platform (each, singular, (^.), (^..))
 import Prelude hiding (concat)
@@ -19,16 +20,16 @@ renderBoard leaderSequence questHistory voteHistory = H.div [] [leaderSequence, 
 renderLeaderSequence :: [PlayerName] -> Widget HTML a
 renderLeaderSequence playerNames =
   H.div
-    []
-    [ H.div [] [H.text "Leader Sequence"],
+    [Bulma.containerBox]
+    [ H.div [Bulma.header4] [H.text "Leader Sequence"],
       H.div [] [H.text $ intercalate " > " playerNames]
     ]
 
 renderQuestHistory :: [Phase] -> Widget HTML a
 renderQuestHistory endPhases =
   H.div
-    []
-    [H.table [] (caption : header : body ++ [lastRow | null body])]
+    [Bulma.containerBox]
+    [H.table [Bulma.tableFullWidth] (caption : header : body ++ [lastRow | null body])]
   where
     renderRow endPhase =
       H.tr
@@ -53,13 +54,13 @@ renderQuestHistory endPhases =
         ]
     lastRow = H.tr [] $ replicate 3 (H.td [] [H.text "-"])
     body = map renderRow endPhases
-    caption = H.caption [] [H.text "Quest History"]
+    caption = H.caption [Bulma.header4] [H.text "Quest History"]
 
 renderVoteHistory :: [PlayerName] -> [Phase] -> Widget HTML a
 renderVoteHistory playerNames phases =
   H.div
-    []
-    [H.table [] (caption : header : body ++ [lastRow | null body])]
+    [Bulma.containerBox]
+    [H.table [Bulma.tableFullWidth] (caption : header : body ++ [lastRow | null body])]
   where
     renderRow (Voted (Proposed _ team quest) votes) =
       H.tr [] $
@@ -82,7 +83,7 @@ renderVoteHistory playerNames phases =
           if quest ^. requiredFails > 1 then "⚠️" else ""
         ]
     lastRow = H.tr [] $ replicate (length playerNames + 2) (H.td [] [H.text "-"])
-    caption = H.caption [] [H.text "Vote History"]
+    caption = H.caption [Bulma.header4] [H.text "Vote History"]
     getVotes phase = case phase of
       EndPhase {} -> (phase ^. singular endPhaseRejected) ++ [phase ^. singular endPhaseQuestResult . voted]
       QuestPhase {} -> (phase ^. singular questPhaseRejected) ++ [phase ^. singular questPhaseApproved]

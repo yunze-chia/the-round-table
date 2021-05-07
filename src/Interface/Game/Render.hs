@@ -10,18 +10,16 @@ import Data.Text (intercalate)
 import Engine.Helpers (isGood)
 import Engine.State
 import Fmt ((+|), (+||), (|+), (||+))
+import Interface.Bulma as Bulma
 import Lens.Micro.Platform ((^.))
 
 renderGame :: Widget HTML a -> Widget HTML a -> Widget HTML a -> Widget HTML a
 renderGame gameCharInfo gameCore gameBoard =
   H.div
     []
-    [ H.div [] [gameCharInfo],
-      H.div
-        []
-        [ H.div [] [gameCore],
-          H.div [] [gameBoard]
-        ]
+    [ H.div [Bulma.block] [gameCharInfo],
+      H.div [Bulma.block] [H.div [Bulma.containerBox] [gameCore]],
+      H.div [Bulma.block] [gameBoard]
     ]
 
 renderCharInfo :: Player -> [Player] -> Widget HTML a

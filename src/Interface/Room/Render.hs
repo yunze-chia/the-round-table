@@ -7,11 +7,11 @@ import Concur.Replica (HTML)
 import qualified Concur.Replica.DOM as H
 import Data.Text (intercalate)
 import Fmt ((+|), (|+))
-import Interface.Bulma as Bulma (block, containerBox, hasTextCentered, title)
+import Interface.Bulma as Bulma (block, containerBox, widthWrapper, title)
 import Interface.Types (PlayerName, RoomId)
 
 renderRoom :: Widget HTML a -> Widget HTML a -> Widget HTML a
-renderRoom roomInfo roomMain = H.div [Bulma.hasTextCentered] [roomInfo, roomMain]
+renderRoom roomInfo roomMain = H.div [Bulma.widthWrapper] [roomInfo, roomMain]
 
 renderRoomInfo :: RoomId -> PlayerName -> Widget HTML a
 renderRoomInfo roomId playerName =
